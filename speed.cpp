@@ -1,5 +1,6 @@
 #include <array>
 #include <chrono>
+#include <ctime>
 #include <iostream>
 
 
@@ -32,11 +33,13 @@ class Matrix
             for (size_t i = 0; i < NRows * NColumns; ++i)
             {
                 // Generate a random number between -1.0 and 1.0.
-                m_elements[i] = static_cast<ElementT>(rand()) / RAND_MAX * 2.0f - 1.0f;
+                m_elements[i] = (rand() / (ElementT) RAND_MAX) * 2.0f - 1.0f;
             }
         }
 
-        // Matrix<ElementT, NRows - NKernelRows + 1, NColumns - NKernelColumns + 1>
+        // Convolution with no padding and stride 1.
+        // Keep the kernel within bounds of the image matrix. This means that the resulting image will be smaller.
+        
         template <size_t NKernelRows, size_t NKernelColumns>
         Matrix<ElementT, NRows - NKernelRows + 1, NColumns - NKernelColumns + 1>
         convolve(
@@ -44,12 +47,6 @@ class Matrix
             Matrix<ElementT, NRows - NKernelRows + 1, NColumns - NKernelColumns + 1>& result) const
         {
             using namespace std;
-
-            // Keep the kernel within bounds of the image matrix. This means that the resulting image will be smaller.
-            // Matrix<ElementT, NRows - NKernelRows + 1, NColumns - NKernelColumns + 1> result;
-
-            // cout << kernel.NumRows << " " << kernel.NumColumns << endl;
-            // cout << result.NumRows << " " << result.NumColumns << endl;
 
             for (size_t iFirstRow = 0; iFirstRow < result.NumRows; ++iFirstRow)
             {
@@ -87,6 +84,7 @@ int main()
 {
     using namespace std;
 
+    srand(time(nullptr));
 
     cout << image.NumRows << " " << image.NumColumns << endl;
     cout << kernel.NumRows << " " << kernel.NumColumns << endl;
@@ -107,18 +105,22 @@ int main()
     end = chrono::high_resolution_clock::now();
     elapsedUSec = chrono::duration_cast<chrono::milliseconds>(end - start).count();
 
-    // prevent result from being optimized away
-    for (size_t row = 0; row < result.NumRows; ++row)
+    // Prevent calculation work from being optimized away because no result it used.
+    auto done = false;
+    auto value = 0.f;
+    for (size_t row = 0; !done && row < result.NumRows; ++row)
     {
-        for (size_t column = 0; column < result.NumColumns; ++column)
+        for (size_t column = 0; !done && column < result.NumColumns; ++column)
         {
-            cout << result(row, column) << " ";
-            break;
+            if ((rand() / (float) RAND_MAX) < 0.01f)
+            {
+                value = result(row, column);
+                done = true;
+            }
         }
-        cout << endl;
-        break;
     }
 
     cout << "Convolution time: " << elapsedUSec << " ms" << endl;
+    cout << value << endl;
     return 0;
 }
