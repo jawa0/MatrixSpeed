@@ -1,6 +1,6 @@
 # 2D Image Convolution Speed Test
 
-## Timing Results (Machine A; 1920 x 1080 image; 25 x 25 kernel)
+## Timing Results (Machine A, 25 x 25 kernel)
 
 Mean: 1447 ms
 Standard Deviation: 50.97 ms
