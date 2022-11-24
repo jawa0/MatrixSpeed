@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-std=c++11 -Wall -Wpedantic -O3 -march=native
+CFLAGS=-std=c++14 -Wall -Wpedantic -O3 -march=native
 
 all: speed_test
 
