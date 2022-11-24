@@ -1,22 +1,36 @@
 # 2D Image Convolution Speed Test
 
-## Timing Results (Machine A; 1920 x 1080 image; 25 x 25 kernel)
+## Timing Results (Machine A)
 
-Mean: 1447 ms
-Standard Deviation: 50.97 ms
-Min: 1416 ms
-Max: 1581 ms
-
-|Trial|Convolution Time (ms)|
-|-----|--------------------|
-|1    |1425                |
-|2    |1432                |
-|3    |1416                |
-|4    |1435                |
-|5    |1433                |
-|6    |1581                |
-|7    |1430                |
-|8    |1424                |
+```
+#-----------------------------------------------------------------------------
+# Matrix 2D Convolution Speed Test
+#-----------------------------------------------------------------------------
+# Image size: 1920 x 1080
+# Naive C++ implementation:
+#  * CPU-only
+#  * single-threaded
+#  * image and kernel stored column-major
+#
+# Seed value for random number generator: 1669255634825439
+#-----------------------------------------------------------------------------
+Kernel Size,Convolution Time (milliseconds)
+"(3, 3)",25
+"(5, 5)",62
+"(7, 7)",110
+"(9, 9)",169
+"(11, 11)",257
+"(13, 13)",367
+"(15, 15)",499
+"(17, 17)",651
+"(19, 19)",821
+"(21, 21)",1008
+"(23, 23)",1204
+"(25, 25)",1428
+"(27, 27)",1653
+"(29, 29)",1973
+"(31, 31)",2214
+```
 
 ## Machines Used for Profiling
 
